@@ -77,33 +77,27 @@ public class ECC {
 	}
 	
 	public static void main(String[] args) {
-		
-            Point p = new Point(new BigInteger("2"), new BigInteger("4"));
-            Point q = new Point(new BigInteger("0"), new BigInteger("2"));
-            EllipticCurve c = new EllipticCurve(new BigInteger("2"), new BigInteger("4"), new BigInteger("1"));
-            Point r = c.add(p, q);
-            System.out.println(r.toString());
-//            // Just use the book's curve and test.
-//            EllipticCurve myCurve = new EllipticCurve(new BigInteger("6277101735386680763835789423207666416083908700390324961279"),
-//                                                        new BigInteger("-3"), 
-//                                                        new BigInteger("64210519e59c80e70fa7e9ab72243049feb8deecc146b9b1", 16));
-//            BigInteger x = new BigInteger("6");
-//            BigInteger y = new BigInteger("19");
-//            BigInteger nA = new BigInteger("10");
-//            ECC Alice = new ECC(myCurve, x, y, nA);
-//
-//            // I have hard-coded my plaintext point.
-//            Point plain = new Point(new BigInteger("3"), new BigInteger("13"));
-//            System.out.println("encrypting "+plain);
-//
-//            // Encrypt and print.
-//            Point[] cipher = Alice.encrypt(plain);
-//            System.out.println("cipher first part "+cipher[0]);
-//            System.out.println("cipher second part "+cipher[1]);
-//
-//            // Decrypt and verify.
-//            Point recover = Alice.decrypt(cipher);
-//            System.out.println("recovered "+recover);
+            // Just use the book's curve and test.
+            EllipticCurve myCurve = new EllipticCurve(new BigInteger("6277101735386680763835789423207666416083908700390324961279"),
+                                                        new BigInteger("-3"), 
+                                                        new BigInteger("64210519e59c80e70fa7e9ab72243049feb8deecc146b9b1", 16));
+            BigInteger x = new BigInteger("6");
+            BigInteger y = new BigInteger("19");
+            BigInteger nA = new BigInteger("10");
+            ECC Alice = new ECC(myCurve, x, y, nA);
+
+            // I have hard-coded my plaintext point.
+            Point plain = new Point(new BigInteger("3"), new BigInteger("13"));
+            System.out.println("encrypting "+plain);
+
+            // Encrypt and print.
+            Point[] cipher = Alice.encrypt(plain);
+            System.out.println("cipher first part "+cipher[0]);
+            System.out.println("cipher second part "+cipher[1]);
+
+            // Decrypt and verify.
+            Point recover = Alice.decrypt(cipher);
+            System.out.println("recovered "+recover);
 
 	}
 }

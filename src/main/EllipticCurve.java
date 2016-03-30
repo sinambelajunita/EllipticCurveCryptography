@@ -17,7 +17,7 @@ public class EllipticCurve {
     private BigInteger a;
     private BigInteger b;
     private BigInteger p;
-    private static Point INFINITE_POINT = new Point(null, null);
+    private static Point INFINITE_POINT = new Point(BigInteger.ZERO, BigInteger.ZERO, true);
     private List<Point> groupPoint;
     public EllipticCurve(BigInteger a, BigInteger b, BigInteger p){
         this.a = a;
@@ -33,14 +33,8 @@ public class EllipticCurve {
     {
         return this.a;
     }
-    private boolean isPointInCurve(Point p){
-        return  (p.getY().multiply(p.getY()))
-                .equals
-                    ((p.getX().multiply(p.getX().multiply(p.getX())))
-                            .add(p.getX().multiply(a))
-                            .add(b));
-    }
     
+    // 
     public boolean mirror(Point p, Point q) {
         return isInEllipticCurve(p) 
                 && isInEllipticCurve(q) 
@@ -57,7 +51,7 @@ public class EllipticCurve {
     // gradien m = a/b
     public Point add(Point p, Point q){
         BigInteger xR, yR;
-        if(!isInEllipticCurve(p) && !isInEllipticCurve(q)) {return null;}
+        //if(!isInEllipticCurve(p) && !isInEllipticCurve(q)) return null;
         if(p.equals(q)){
             BigInteger TWO = new BigInteger("2");
             BigInteger THREE = new BigInteger("3");
@@ -93,24 +87,23 @@ public class EllipticCurve {
     }
     
     public Point multiply(BigInteger k, Point p){
-        Point result = null;
         BigInteger two = new BigInteger("2");
         if (k.equals(BigInteger.ONE))
             return new Point(p);
-        if (k.equals(two))
+        else if (k.equals(two))
             return this.add(p, p);
-        if(p.getY().equals(new BigInteger("0"))){
+        else if(!p.getY().equals(new BigInteger("0"))){
             BigInteger i = new BigInteger("1");
-            result = new Point(p);
+            Point result = new Point(p);
             while(!i.equals(k)){
                 result = add(result,p);
                 i = i.add(new BigInteger("1"));
             }
+            return result;
         }
         else {
-            result = new Point(INFINITE_POINT);
+            return new Point(INFINITE_POINT);
         }
-        return result;
     }
     
     public boolean isInEllipticCurve(Point p){
