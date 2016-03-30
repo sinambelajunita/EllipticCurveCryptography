@@ -12,7 +12,6 @@ package main;
 **/
 
 import java.math.*;
-import java.util.ArrayList;
 
 public class ECC {
 	
@@ -20,7 +19,7 @@ public class ECC {
     private Point generator;
     private Point publicKey;
     private BigInteger privateKey;
-
+    
     public ECC(EllipticCurve c, BigInteger x, BigInteger y, BigInteger nA) {
             curve = c;
             generator = new Point(x, y);
@@ -32,11 +31,10 @@ public class ECC {
     // Encryption.
     public Point[] encrypt(Point plain) {
         int bits = curve.getP().bitLength();
-        BigInteger k = new BigInteger("1800001113776135289708488930858597154146763766152901314982");//bits, new Random());
 
         Point[] ans = new Point[2];
-        ans[0] = curve.multiply(k,generator);
-        ans[1] = curve.add(curve.multiply(k, publicKey),plain);
+        ans[0] = curve.multiply(generator.getK(),generator);
+        ans[1] = curve.add(curve.multiply(generator.getK(), publicKey),plain);
         return ans;
     }
 
