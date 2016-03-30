@@ -29,6 +29,10 @@ public class EllipticCurve {
     public BigInteger getP(){
         return this.p;
     }
+    public BigInteger getA()
+    {
+        return this.a;
+    }
     private boolean isPointInCurve(Point p){
         return  (p.getY().multiply(p.getY()))
                 .equals
@@ -85,9 +89,15 @@ public class EllipticCurve {
         }
         return result;
     }
-    // assumption : k > 2
+    
     public Point multiply(BigInteger k, Point p){
         Point result = null;
+        
+        BigInteger two = new BigInteger("2");
+        if (k.equals(BigInteger.ONE))
+            return new Point(p);
+        if (k.equals(two))
+            return this.add(p, p);
         if(p.getY().equals(new BigInteger("0"))){
             BigInteger i = new BigInteger("1");
             result = new Point(p);
