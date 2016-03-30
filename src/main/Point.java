@@ -28,4 +28,13 @@ public class Point {
     public BigInteger getY(){
         return this.y;
     }
+    public boolean isInfinite(){
+        return null == x || y == null;
+    }
+    public boolean equals(Point p){
+        return p.x.equals(this.x) && p.y.equals(this.y);
+    }
+    public boolean isInverse(Point p){
+        return false;
+    }
 }
