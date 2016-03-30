@@ -53,19 +53,21 @@ public class EllipticCurve {
     // gradien m = a/b
     public Point add(Point p, Point q){
         BigInteger xR, yR;
+        if(!isInEllipticCurve(p) && !isInEllipticCurve(q)) {return null;}
         if(p.equals(q)){
             BigInteger TWO = new BigInteger("2");
             BigInteger THREE = new BigInteger("3");
-            BigInteger lambdaA = THREE.multiply(p.getX().multiply(p.getX())).add(a);
-            BigInteger lambdaB = TWO.multiply(p.getY());
-            xR = (lambdaA.multiply(lambdaA)).divide(lambdaB.multiply(lambdaB)).subtract(TWO.multiply(p.getX()));
-            yR = (lambdaA.multiply(p.getX().subtract(xR))).divide(lambdaB).subtract(p.getY());
+            BigInteger lambda = (THREE.multiply(p.getX().multiply(p.getX())).add(a).divide(TWO.multiply(p.getY())));//.mod(this.p);
+            xR = ((lambda.multiply(lambda)).subtract(TWO.multiply(p.getX())));//.mod(this.p);
+            yR = ((lambda.multiply(p.getX().subtract(xR))).subtract(p.getY()));//.mod(this.p);
+        }
+        else if (mirror(p,q)) {
+            return new Point(INFINITE_POINT);
         }
         else{
-            BigInteger lambdaA = p.getY().add(q.getY().negate());
-            BigInteger lambdaB = p.getX().add(q.getX().negate());
-            xR = ((lambdaA.divide(lambdaB)).multiply(lambdaA.divide(lambdaB))).subtract(p.getX()).subtract(q.getX());
-            yR = ((lambdaA.divide(lambdaB)).multiply(p.getX().subtract(xR))).subtract(p.getY());
+            BigInteger lambda = ((p.getY().subtract(q.getY())).divide(p.getX().subtract(q.getX())));//.mod(this.p);
+            xR = ((lambda.multiply(lambda)).subtract(p.getX()).subtract(q.getX()));//.mod(this.p);
+            yR = ((lambda.multiply(p.getX().subtract(xR))).subtract(p.getY()));//.mod(this.p);
         }
         return new Point(xR, yR);
     }
@@ -88,12 +90,12 @@ public class EllipticCurve {
     // assumption : k > 2
     public Point multiply(BigInteger k, Point p){
         Point result = null;
-        if(p.getY().equals(new BigInteger("0"))){
+        if(!p.getY().equals(new BigInteger("0"))){
             BigInteger i = new BigInteger("1");
             result = new Point(p);
             while(!i.equals(k)){
                 result = add(result,p);
-                i.add(new BigInteger("1"));
+                i = i.add(new BigInteger("1"));
             }
         }
         else {
