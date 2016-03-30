@@ -24,7 +24,6 @@ public class EllipticCurve {
         this.b = b;
         this.p = p;
         groupPoint = new ArrayList<>();
-//        generateGroup();
     }
     public BigInteger getP(){
         return this.p;
@@ -51,27 +50,46 @@ public class EllipticCurve {
         BigInteger newY = this.p.subtract(p.getY());
         return new Point(p.getX(), newY);
     }
+    
+    public Point add(Point a, Point b) {
+		
+        if (a.equals(b)) {
 
-    // gradien m = a/b
-    public Point add(Point p, Point q){
-        BigInteger xR, yR;
-        //if(!isInEllipticCurve(p) && !isInEllipticCurve(q)) return null;
-        if(p.equals(q)){
-            BigInteger TWO = new BigInteger("2");
-            BigInteger THREE = new BigInteger("3");
-            BigInteger lambda = (THREE.multiply(p.getX().multiply(p.getX())).add(a).divide(TWO.multiply(p.getY()))).mod(this.p);
-            xR = ((lambda.multiply(lambda)).subtract(TWO.multiply(p.getX()))).mod(this.p);
-            yR = ((lambda.multiply(p.getX().subtract(xR))).subtract(p.getY())).mod(this.p);
+            BigInteger three = new BigInteger("3");
+            BigInteger two = new BigInteger("2");
+            BigInteger temp = new BigInteger(a.getX().toString());
+
+            BigInteger lambda = temp.modPow(two, this.p);
+            lambda = three.multiply(lambda);
+            lambda = lambda.add(this.a);
+            BigInteger den = two.multiply(a.getY());
+            lambda = lambda.multiply(den.modInverse(this.p));
+
+            BigInteger newX = lambda.multiply(lambda).subtract(a.getX()).subtract(a.getX()).mod(this.p);
+            BigInteger newY = (lambda.multiply(a.getX().subtract(newX))).subtract(a.getY()).mod(this.p);
+            return new Point(newX, newY);
+
         }
-//        else if (mirror(p,q)) {
-//            return new Point(INFINITE_POINT);
-//        }
-        else{
-            BigInteger lambda = ((p.getY().subtract(q.getY())).divide(p.getX().subtract(q.getX()))).mod(this.p);
-            xR = ((lambda.multiply(lambda)).subtract(p.getX()).subtract(q.getX())).mod(this.p);
-            yR = ((lambda.multiply(p.getX().subtract(xR))).subtract(p.getY())).mod(this.p);
+
+        else if (this.mirror(a, b)) {
+            return new Point(BigInteger.ZERO, BigInteger.ZERO);
         }
-        return new Point(xR, yR);
+
+        else {
+            BigInteger lambda = b.getY().subtract(a.getY());
+            BigInteger den = b.getX().subtract(a.getX());
+            lambda = lambda.multiply(den.modInverse(this.p));
+
+            BigInteger newX = lambda.multiply(lambda).subtract(a.getX()).subtract(b.getX()).mod(this.p);
+            BigInteger newY = (lambda.multiply(a.getX().subtract(newX))).subtract(a.getY()).mod(this.p);
+            return new Point(newX, newY);
+        }
+    }
+    
+    public boolean equals(EllipticCurve other) {
+        return p.equals(other.p) 
+                && a.equals(other.a) 
+                && b.equals(other.b);
     }
     
     public Point subtract(Point p, Point q) {
@@ -118,15 +136,4 @@ public class EllipticCurve {
     public boolean isInverse(Point p, Point q){
         return false;
     }
-//    private void generateGroup(){
-//        BigInteger x = new BigInteger("0");
-//        while(!x.equals(p)){
-//            BigInteger squareYModP = ((x.multiply(x.multiply(x))).add(a.multiply(x)).add(b)).mod(p);
-//            BigInteger squareY1 = squareYModP.modInverse(p);
-//            BigInteger squareY2 = squareYModP.modInverse(p);
-//            while(squareY2.equals(squareY1)){
-//                squareY2 = squareYModP.modInverse(p);
-//            }
-//        }
-//    }
 }

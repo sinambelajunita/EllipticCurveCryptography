@@ -16,38 +16,37 @@ import java.math.*;
 public class ECC {
 	
     private EllipticCurve curve;
-    private Point generator;
+    private Point basePoint;
     private Point publicKey;
     private BigInteger privateKey;
     
     public ECC(EllipticCurve c, BigInteger x, BigInteger y, BigInteger nA) {
             curve = c;
-            generator = new Point(x, y);
+            basePoint = new Point(x, y);
             privateKey = nA;
-            publicKey = c.multiply(privateKey, generator);
+            publicKey = c.multiply(privateKey, basePoint);
             System.out.println("Public key: " + publicKey.toString());
     }
-
-    // Encryption.
+    
+    // Enkripsi.
     public Point[] encrypt(Point plain) {
         int bits = curve.getP().bitLength();
 
+        // Enkripsi yang menghasilkan 2 pasang point, (k * base_point, plain + k*publickey)
         Point[] ans = new Point[2];
-        ans[0] = curve.multiply(generator.getK(),generator);
-        ans[1] = curve.add(curve.multiply(generator.getK(), publicKey),plain);
+        ans[0] = this.curve.multiply(basePoint.getK(), this.basePoint);
+        ans[1] = this.curve.add(plain, this.curve.multiply(plain.getK(), publicKey));
         return ans;
     }
 
     public Point decrypt(Point[] cipher) {
-
-            Point sub = curve.multiply(privateKey,cipher[0]);
-
-            return curve.subtract(cipher[1],sub);
+        Point sub = curve.multiply(privateKey,cipher[0]);
+        return curve.subtract(cipher[1],sub);
     }
 
     public String toString() {
 
-            return "Gen: "+generator+"\n"+
+            return "Gen: "+basePoint+"\n"+
                        "pri: "+privateKey+"\n"+
                        "pub: "+publicKey;
     }
