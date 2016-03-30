@@ -53,7 +53,7 @@ public class ECC {
 //	// Encryption.
 	public Point[] encrypt(Point plain) {
             int bits = curve.getP().bitLength();
-            BigInteger k = new BigInteger(bits, new Random());
+            BigInteger k = new BigInteger("1800001113776135289708488930858597154146763766152901314982");//bits, new Random());
             System.out.println("Picked "+k+" as k for encrypting.");
 
             Point[] ans = new Point[2];
@@ -83,21 +83,23 @@ public class ECC {
                                                         new BigInteger("64210519e59c80e70fa7e9ab72243049feb8deecc146b9b1", 16));
             BigInteger x = new BigInteger("6");
             BigInteger y = new BigInteger("19");
-            BigInteger nA = new BigInteger("10");
-            ECC Alice = new ECC(myCurve, x, y, nA);
+            BigInteger nA = new BigInteger("2");
+            Point p = myCurve.multiply(nA, new Point(x,y));
+            System.out.println("Hasil: " + p.toString());
+//            ECC Alice = new ECC(myCurve, x, y, nA);
 
-            // I have hard-coded my plaintext point.
-            Point plain = new Point(new BigInteger("3"), new BigInteger("13"));
-            System.out.println("encrypting "+plain);
-
-            // Encrypt and print.
-            Point[] cipher = Alice.encrypt(plain);
-            System.out.println("cipher first part "+cipher[0]);
-            System.out.println("cipher second part "+cipher[1]);
-
-            // Decrypt and verify.
-            Point recover = Alice.decrypt(cipher);
-            System.out.println("recovered "+recover);
+//            // I have hard-coded my plaintext point.
+//            Point plain = new Point(new BigInteger("3"), new BigInteger("13"));
+//            System.out.println("encrypting "+plain);
+//
+//            // Encrypt and print.
+//            Point[] cipher = Alice.encrypt(plain);
+//            System.out.println("cipher first part "+cipher[0]);
+//            System.out.println("cipher second part "+cipher[1]);
+//
+//            // Decrypt and verify.
+//            Point recover = Alice.decrypt(cipher);
+//            System.out.println("recovered "+recover);
 
 	}
 }

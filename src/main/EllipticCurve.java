@@ -55,17 +55,17 @@ public class EllipticCurve {
         if(p.equals(q)){
             BigInteger TWO = new BigInteger("2");
             BigInteger THREE = new BigInteger("3");
-            BigInteger lambda = (THREE.multiply(p.getX().multiply(p.getX())).add(a).divide(TWO.multiply(p.getY())));//.mod(this.p);
-            xR = ((lambda.multiply(lambda)).subtract(TWO.multiply(p.getX())));//.mod(this.p);
-            yR = ((lambda.multiply(p.getX().subtract(xR))).subtract(p.getY()));//.mod(this.p);
+            BigInteger lambda = (THREE.multiply(p.getX().multiply(p.getX())).add(a).divide(TWO.multiply(p.getY()))).mod(this.p);
+            xR = ((lambda.multiply(lambda)).subtract(TWO.multiply(p.getX()))).mod(this.p);
+            yR = ((lambda.multiply(p.getX().subtract(xR))).subtract(p.getY())).mod(this.p);
         }
-        else if (mirror(p,q)) {
-            return new Point(INFINITE_POINT);
-        }
+//        else if (mirror(p,q)) {
+//            return new Point(INFINITE_POINT);
+//        }
         else{
-            BigInteger lambda = ((p.getY().subtract(q.getY())).divide(p.getX().subtract(q.getX())));//.mod(this.p);
-            xR = ((lambda.multiply(lambda)).subtract(p.getX()).subtract(q.getX()));//.mod(this.p);
-            yR = ((lambda.multiply(p.getX().subtract(xR))).subtract(p.getY()));//.mod(this.p);
+            BigInteger lambda = ((p.getY().subtract(q.getY())).divide(p.getX().subtract(q.getX()))).mod(this.p);
+            xR = ((lambda.multiply(lambda)).subtract(p.getX()).subtract(q.getX())).mod(this.p);
+            yR = ((lambda.multiply(p.getX().subtract(xR))).subtract(p.getY())).mod(this.p);
         }
         return new Point(xR, yR);
     }
@@ -92,17 +92,13 @@ public class EllipticCurve {
             return new Point(p);
         else if (k.equals(two))
             return this.add(p, p);
-        else if(!p.getY().equals(new BigInteger("0"))){
-            BigInteger i = new BigInteger("1");
-            Point result = new Point(p);
-            while(!i.equals(k)){
-                result = add(result,p);
-                i = i.add(new BigInteger("1"));
-            }
-            return result;
+        else if(k.mod(two).equals(BigInteger.ZERO)){
+            Point result = multiply(k.divide(two), p);
+            return add(result,result);
         }
         else {
-            return new Point(INFINITE_POINT);
+            k = k.subtract(BigInteger.ONE);
+            return add(p, multiply(k, p));
         }
     }
     
