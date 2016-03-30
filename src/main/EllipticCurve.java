@@ -24,8 +24,11 @@ public class EllipticCurve {
         this.b = b;
         this.p = p;
         groupPoint = new ArrayList<>();
+//        generateGroup();
     }
-    
+    public BigInteger getP(){
+        return this.p;
+    }
     private boolean isPointInCurve(Point p){
         return  (p.getY().multiply(p.getY()))
                 .equals
@@ -34,6 +37,19 @@ public class EllipticCurve {
                             .add(b));
     }
     
+    public boolean mirror(Point p, Point q) {
+        return isInEllipticCurve(p) 
+                && isInEllipticCurve(q) 
+                && p.getX().equals(q.getX()) 
+                && p.getY().equals(this.p.subtract(q.getY()));
+    }
+
+    // Returns the negative of this point, which is its mirror.
+    public Point negate(Point p) {
+        BigInteger newY = this.p.subtract(p.getY());
+        return new Point(p.getX(), newY);
+    }
+
     // gradien m = a/b
     public Point add(Point p, Point q){
         BigInteger xR, yR;
@@ -54,7 +70,10 @@ public class EllipticCurve {
         return new Point(xR, yR);
     }
     
-    
+    public Point subtract(Point p, Point q) {
+        q = negate(q);
+        return this.add(p,q);
+    }
     public Point doubling(Point p){
         Point result = null;
         if(p.getY().equals(new BigInteger("0"))){
