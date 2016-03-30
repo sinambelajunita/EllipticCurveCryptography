@@ -33,6 +33,10 @@ public class EllipticCurve {
     {
         return this.a;
     }
+    public BigInteger getB()
+    {
+        return this.b;
+    }
     
     // 
     public boolean mirror(Point p, Point q) {
