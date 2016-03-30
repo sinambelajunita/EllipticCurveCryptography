@@ -15,7 +15,7 @@ public class Point {
     private BigInteger x;
     private BigInteger y;
     private boolean infinite;
-    private BigInteger k = new BigInteger("1800001113776135289708488930858597154146763766152901314982");
+    private BigInteger k = new BigInteger("20");
     
     public Point(BigInteger x, BigInteger y){
         this.x = x;
