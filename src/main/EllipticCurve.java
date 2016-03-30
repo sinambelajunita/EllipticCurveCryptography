@@ -27,7 +27,11 @@ public class EllipticCurve {
     }
     
     private boolean isPointInCurve(Point p){
-        return  (p.getY().multiply(p.getY())).equals((p.getX().multiply(p.getX().multiply(p.getX()))).add(p.getX().multiply(a)).add(b));
+        return  (p.getY().multiply(p.getY()))
+                .equals
+                    ((p.getX().multiply(p.getX().multiply(p.getX())))
+                            .add(p.getX().multiply(a))
+                            .add(b));
     }
     
     // gradien m = a/b
@@ -86,6 +90,10 @@ public class EllipticCurve {
                     .mod(this.p))
                     .subtract((p.getY().multiply(p.getY())).mod(this.p)) == BigInteger.ZERO;
         }
+    }
+    
+    public boolean isInverse(Point p, Point q){
+        return false;
     }
 //    private void generateGroup(){
 //        BigInteger x = new BigInteger("0");
