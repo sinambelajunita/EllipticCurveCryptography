@@ -25,7 +25,11 @@ public class ECC {
             basePoint = new Point(x, y);
             privateKey = nA;
             publicKey = c.multiply(privateKey, basePoint);
-            System.out.println("Public key: " + publicKey.toString());
+    }
+    
+    public Point getPublicKey()
+    {
+        return publicKey;
     }
     
     // Enkripsi.
