@@ -114,7 +114,7 @@ public class Test {
         
         ECC ecc = new ECC(curve, base.getX(), base.getY(), privateKey);
         
-        File file = new File("./test.png");
+        File file = new File("./.gitignore");
         byte[] fileData = new byte[(int) file.length()];
         FileInputStream in = new FileInputStream(file);
         in.read(fileData);
@@ -133,11 +133,11 @@ public class Test {
             decodedFile[i] = dekrip.convertToByte();
 
         }
-        FileOutputStream fw = new FileOutputStream(new File("./decoded.png"));
+        FileOutputStream fw = new FileOutputStream(new File("./decoded"));
         fw.write(decodedFile);
         fw.close();
         
-        fw = new FileOutputStream(new File("./encrypted.png"));
+        fw = new FileOutputStream(new File("./encrypted"));
         fw.write(encryptedFile);
         fw.close();
     }

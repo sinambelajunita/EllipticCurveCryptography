@@ -63,6 +63,10 @@ public class Point {
     {
         return (this.x.subtract(new BigInteger("1"))).divide(this.k).byteValue();
     }
+//    public static Point[] convertToPoint(byte[] bytes)
+//    {
+//        return (this.x.subtract(new BigInteger("1"))).divide(this.k).byteValue();
+//    }
     public BigInteger getX(){
         return this.x;
     }
